@@ -9,12 +9,11 @@ class Cli : public QObject
 public:
     explicit Cli(QObject *parent = nullptr);
 
-
 public slots:
     void run();
 
 signals:
-
+    void done();
 };
 
 #endif // CLI_H

@@ -1,5 +1,8 @@
 #include "cli.h"
+
 #include "mere/auth/service.h"
+
+#include <iostream>
 
 #include <QCommandLineParser>
 
@@ -37,7 +40,7 @@ void Cli::run()
 
         for (const auto &user : service.users(Mere::Auth::User::Type::SuperUser | Mere::Auth::User::Type::NormalUser))
         {
-            qDebug() << user.name() << user.profile().home() << user.profile().shell();
+            std::cout << user.name() << user.profile().home() << user.profile().shell() << std::endl;
         }
     }
     else
@@ -46,41 +49,40 @@ void Cli::run()
         QString password = parser.value(passwordOption);
 
         Mere::Auth::Service service;
-        bool ok = service.login(username, password);
+        bool ok = service.login(username.toStdString(), password.toStdString());
         if (ok)
         {
-            qDebug() << "Yes, a valid user of this system.";
+            std::cout << "Yes, a valid user of this system." << std::endl;
 
             try
             {
                 Mere::Auth::User user = service.user(username);
-                qDebug() << "Username:" << user.name();
-                qDebug() << "Uid:" << user.uid();
-                qDebug() << "Gid:" << user.gid();
-                qDebug() << "Name:" << user.profile().name();
+                std::cout << "Username:" << user.name() << std::endl;
+                std::cout << "Uid:" << user.uid() << std::endl;
+                std::cout << "Gid:" << user.gid() << std::endl;
+                std::cout << "Name:" << user.profile().name() << std::endl;
 
                 Mere::Auth::UserProfile profile = user.profile();
                 for (const auto &group : profile.groups())
                 {
-                    qDebug() << "Gid:" << group.gid();
-                    qDebug() << "Name:" << group.name();
+                    std::cout << "Gid:" << group.gid() << std::endl;
+                    std::cout << "Name:" << group.name() << std::endl;
                     for (const auto &member : group.members())
                     {
-                        qDebug() << "Member:" << member;
+                        std::cout << "Member:" << member << std::endl;
                     }
                 }
             }
             catch(std::exception &ex)
             {
-                qDebug() << ex.what();
+                std::cout << ex.what() << std::endl;
             }
         }
         else
         {
-            qDebug() << "Sorry, not a valid user of this system.";
-            ::exit(1);
+            std::cout << "Sorry, not a valid user of this system." << std::endl;
+
         }
     }
-
-    ::exit(0);
+    emit done();
 }
