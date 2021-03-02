@@ -25,11 +25,16 @@ void Cli::run()
                                       QCoreApplication::translate("main", "Set the username"),
                                       "password");
 
+    QCommandLineOption serviceOption(QStringList() << "s" << "service",
+                                      QCoreApplication::translate("service", "Set the service"),
+                                      "service", "mere");
+
     QCommandLineOption userListOption(QStringList() << "l" << "list",
                                       QCoreApplication::translate("main", "List all of the users"));
 
     parser.addOption(usernameOption);
     parser.addOption(passwordOption);
+    parser.addOption(serviceOption);
     parser.addOption(userListOption);
 
     parser.process(QCoreApplication::arguments());
@@ -48,7 +53,7 @@ void Cli::run()
         QString username = parser.value(usernameOption);
         QString password = parser.value(passwordOption);
 
-        Mere::Auth::Service service;
+        Mere::Auth::Service service(parser.value(serviceOption).toStdString());
         bool ok = service.login(username.toStdString(), password.toStdString());
         if (ok)
         {

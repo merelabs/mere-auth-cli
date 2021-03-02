@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName("Mere Auth");
     QCoreApplication::setApplicationVersion("0.0.1");
+    QCoreApplication::setSetuidAllowed(true);
 
     QCoreApplication app(argc, argv);
 

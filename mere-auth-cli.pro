@@ -16,8 +16,13 @@ SOURCES += \
         src/cli.cpp \
         src/main.cpp
 
-LIBS += -lmere-utils
+HEADERS += \
+    src/cli.h
+
+
 INCLUDEPATH += /usr/local/include
+
+LIBS += -lmere-utils
 
 #
 # Install
@@ -28,5 +33,3 @@ unix
     INSTALLS += target
 }
 
-HEADERS += \
-    src/cli.h
